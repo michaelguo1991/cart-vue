@@ -1,58 +1,217 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+  <igt-form
+    :model="model"
+    :schema="schema"
+    :immediate-validate="false"
+    :options="options"
+    @validate="validateHandler"
+    @submit="submitHandler"
+    @reset="resetHandler"
+  >
+    <igt-form-item>
+      <igt-validator 
+        v-model="inputValid"
+        :model="model.inputValue"
+        :rules="rules"
+        :messages="messages"
+      >
+        <cube-input v-model="model.inputValue"></cube-input>
+      </igt-validator>
+    </igt-form-item>
+
+    <igt-form-item>
+      <cube-validator v-model="inputValid1" :model="model.inputValue1" :rules="rules1" :messages="messages">
+        <cube-input v-model="model.inputValue1"></cube-input>
+        <div slot="message" class="custom-msg" slot-scope="slotProps">
+          <p>{{ slotProps.message }}</p>
+        </div>
+      </cube-validator>
+    </igt-form-item>
+    <!-- <igt-form-group>
+      <igt-form-item>
+        <cube-checkbox v-model="model.checkboxValue">Checkbox测试</cube-checkbox>
+      </igt-form-item>
+      <igt-form-item>
+        <cube-checkbox-group v-model="model.checkboxGroupValue">
+          <cube-checkbox option="1" shape="square">Checkbox 1</cube-checkbox>
+          <cube-checkbox option="2" shape="square">Checkbox 2</cube-checkbox>
+          <cube-checkbox option="3" shape="square">Checkbox 3</cube-checkbox>
+        </cube-checkbox-group>
+      </igt-form-item>
+      <igt-form-item>
+        <cube-input :clearable="true" v-model="model.inputValue"></cube-input>
+      </igt-form-item>
+      <igt-form-item>
+        <cube-switch v-model="model.switchValue"></cube-switch>
+      </igt-form-item>
+    </igt-form-group> -->
+  </igt-form>
 </template>
 
 <script>
+import IgtForm from './igt-form';
+import IgtFormGroup from './igt-form-group';
+import IgtFormItem from './igt-form-item';
+import IgtValidator from './igt-validator';
+
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
+  components: {
+    IgtForm,
+    IgtFormGroup,
+    IgtFormItem,
+    IgtValidator
+  },
+  inject: {
+    $validator: '$validator'
+  },
+  data() {
+    return {
+      validity: {},
+      valid: undefined,
+      model: {
+        checkboxValue: true,
+        checkboxGroupValue: ['1'],
+        inputValue: '',
+        inputValue1: '',
+        radioValue: '',
+        rateValue: 0,
+        selectValue: 2018,
+        switchValue: true,
+        textareaValue: '',
+        uploadValue: []
+      },
+      schema: {
+        groups: [
+          {
+            legend: '基础',
+            fields: [
+              {
+                type: 'checkbox',
+                modelKey: 'checkboxValue',
+                props: {
+                  options: {
+                    label: 'CheckBox',
+                    value: true
+                  }
+                },
+                rules: {
+                  required: true
+                },
+                messages: {
+                  required: 'Please check this checkbox field'
+                }
+              },
+              {
+                type: 'checkbox-group',
+                modelKey: 'checkboxGroupValue',
+                label: 'CheckboxGroup',
+                props: {
+                  options: ['1', '2', '3'],
+                  shape: 'square'
+                },
+                rules: {
+                  required: true
+                }
+              },
+              {
+                type: 'input',
+                modelKey: 'inputValue',
+                label: 'Input',
+                props: {
+                  placeholder: '请输入'
+                },
+                rules: {
+                  required: true
+                },
+                // validating when blur
+                trigger: 'blur'
+              },
+              {
+                type: 'switch',
+                modelKey: 'switchValue',
+                label: 'Switch',
+                rules: {
+                  required: true
+                }
+              },
+              {
+                type: 'submit',
+                props: {
+                  label: 'Submit'
+                }
+              },
+              {
+                type: 'reset',
+                props: {
+                  label: 'Reset'
+                }
+              }
+            ]
+          }
+        ]
+      },
+      options: {
+        scrollToInvalidField: true,
+        layout: 'standard'
+      },
+      rules: {
+        required: true,
+        type: 'number',
+        min: 4,
+        // pattern: /ctrip.com$/,
+        custom: val => {
+          return new Promise((resolve, reject) => {
+            setTimeout(() => {
+              console.log(val.length > 6);
+              resolve(val.length > 6)
+            }, 1000)
+          })
+        }
+      },
+      inputValid: false,
+      rules1: {
+        required: true,
+        type: 'number',
+        custom: val => {
+          return val.length > 8
+        }
+      },
+      messages: {
+        // lengthValid: '至少6位',
+        custom: '请输入至少8位数字'
+      },
+      inputValid1: false
+    }
+  },
+  created() {
+    console.log(this.$validator);
+  },
+  watch: {
+    // model: {
+    //   handler(newModel, oldModel) {
+    //     for (let key in newModel) {
+    //       console.log(`${key}: ${newModel[key]}`);
+    //     }
+    //   },
+    //   deep: true
+    // }
+  },
+  methods: {
+    submitHandler(e) {
+      e.preventDefault();
+      console.log('submit: ', e);
+    },
+    resetHandler(e) {
+      console.log('reset: ', e);
+    },
+    validateHandler(result) {
+      console.log('validate result: ', result);
+    }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>
