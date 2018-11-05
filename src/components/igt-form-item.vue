@@ -1,19 +1,21 @@
 <template>
     <div class="igt-form-item">
         <slot>
-            <template v-if="!isBtnType">
+            <!-- <template v-if="!isBtnType">
                 <component :is="componentName" v-model="modelValue" v-bind="props"></component>    
             </template>
-            <cube-button v-bind="props" v-else>{{ props.label }}</cube-button>
+            <cube-button v-bind="props" v-else>{{ props.label }}</cube-button> -->
         </slot>
     </div>
 </template>
 
 <script>
 import { getComponentName } from './formUtil';
+import validator from '../util/validator/validator';
 
 export default {
     name: 'IgtFormItem',
+    inject: ['igtForm'],
     props: {
         type: { //type和props用于根据schema自动生成
             type: String,
@@ -31,19 +33,12 @@ export default {
             }
         },
         rules: {
-            type: Object,
-            default() {
-                return {}
-            }
+            type: [Object, Array]
         },
         modelKey: String
     },
     data() {
-        const modelValue = this.form.model[this.modelKey];
-        this.refineField();
-        return {
-            modelValue
-        }
+        return {}
     },
     computed: {
         componentName() {
@@ -51,12 +46,21 @@ export default {
         },
         isBtnType() {
             return this.realType == 'button';
+        },
+        realRules() {
+            const formRules = (this.igtForm.rules || {})[this.modelKey] || [];
+            const selfRules = this.rules;
+            
+            return [].concat(selfRules || formRules || []);
         }
     },
     beforeCreate() {
-        this.form = this.$parent.form || this.$parent;
+        // this.form = this.$parent.form || this.$parent;
+        // console.log(this.igtForm);
     },
     created() {
+        this.igtForm.fields.push(this);
+        console.log('rules: ', this.realRules);
     },
     methods: {
         refineField() {
@@ -66,6 +70,15 @@ export default {
             } else {
                 this.realType = this.type;
             }
+        },
+        validate() {
+            return validator.validate().then(val => {
+                return {
+                    valid: val,
+                    field: this,
+                    errMsg: '验证错误'
+                }
+            });
         }
     }
 }

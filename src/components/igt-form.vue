@@ -19,6 +19,11 @@
         components: {
             IgtFormGroup
         },
+        provide() {
+            return {
+                igtForm: this
+            }
+        },
         props: {
             model: {
                 type: Object,
@@ -39,11 +44,12 @@
                     scrollToInvalidField: false,
                     layout: 'standard'
                 }
-            }
+            },
+            rules: [Array, Object]
         },
         data() {
             return {
-
+                fields: []
             }
         },
         computed: {
@@ -57,7 +63,16 @@
             }
         },
         methods: {
-
+            validate() {
+                const promises = this.fields.reduce((acc, field) => {
+                    acc.push(field.validate());
+                    return acc;
+                }, []);
+                return Promise.all(promises).then(results => {
+                    console.log(results);
+                    return true;
+                });
+            }
         },
         beforeCreate() {
             

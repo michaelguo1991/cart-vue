@@ -1,14 +1,28 @@
 <template>
   <igt-form
+    ref="form"
     :model="model"
     :schema="schema"
+    :rules="formRules"
     :immediate-validate="false"
     :options="options"
     @validate="validateHandler"
     @submit="submitHandler"
     @reset="resetHandler"
   >
+    <igt-form-item modelKey="inputValue">
+      <cube-input v-model="model.inputValue" placeholder="请输入姓名"></cube-input>
+    </igt-form-item>
+    <igt-form-item modelKey="passwordValue">
+      <cube-input v-model="model.passwordValue" placeholder="请输入密码"></cube-input>
+    </igt-form-item>
+    <igt-form-item modelKey="ageValue">
+      <cube-input v-model="model.ageValue" placeholder="请输入年龄"></cube-input>
+    </igt-form-item>
     <igt-form-item>
+      <cube-button @click="validateForm">验证表单</cube-button>
+    </igt-form-item>
+    <!-- <igt-form-item>
       <igt-validator 
         v-model="inputValid"
         :model="model.inputValue"
@@ -26,7 +40,7 @@
           <p>{{ slotProps.message }}</p>
         </div>
       </cube-validator>
-    </igt-form-item>
+    </igt-form-item> -->
     <!-- <igt-form-group>
       <igt-form-item>
         <cube-checkbox v-model="model.checkboxValue">Checkbox测试</cube-checkbox>
@@ -74,12 +88,26 @@ export default {
         checkboxGroupValue: ['1'],
         inputValue: '',
         inputValue1: '',
+        passwordValue: '',
         radioValue: '',
         rateValue: 0,
         selectValue: 2018,
         switchValue: true,
         textareaValue: '',
         uploadValue: []
+      },
+      formRules: {
+        inputValue: [
+          { required: true, msg: '请输入姓名', trigger: '' },
+          { min: 6, msg: '请输入至少6位字符', trigger: '' }
+        ],
+        passwordValue: { required: true, msg: '请输入密码' },
+        ageValue: [
+          { required: true, msg: '请输入年龄' },
+          { type: 'number', msg: '请输入正确的年龄格式' },
+          { between: '30, 50', msg: '请输入30到50的年龄' },
+          { minVal: 40, msg: '年龄不能小于40' }
+        ]
       },
       schema: {
         groups: [
@@ -207,6 +235,11 @@ export default {
     },
     validateHandler(result) {
       console.log('validate result: ', result);
+    },
+    validateForm() {
+      this.$refs.form.validate().then(val => {
+        console.log('form validate result: ', val);
+      });
     }
   }
 }
