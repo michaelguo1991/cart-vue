@@ -99,12 +99,23 @@ export default {
       formRules: {
         inputValue: [
           { required: true, msg: '请输入姓名', trigger: '' },
-          { min: 6, msg: '请输入至少6位字符', trigger: '' }
+          // { min: 6, msg: '请输入至少6位字符', trigger: '' }
+          { nameValidator: (val) => {
+              return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                  if (val == 'michael') {
+                    resolve(true)
+                  } else {
+                    resolve(false);
+                  }
+                }, 1000);
+              }) 
+          }, msg: '姓名必须为michael' }
         ],
         passwordValue: { required: true, msg: '请输入密码' },
         ageValue: [
           { required: true, msg: '请输入年龄' },
-          { type: 'number', msg: '请输入正确的年龄格式' },
+          // { type: 'number', msg: '请输入正确的年龄格式' },
           { between: '30, 50', msg: '请输入30到50的年龄' },
           { minVal: 40, msg: '年龄不能小于40' }
         ]
@@ -238,7 +249,7 @@ export default {
     },
     validateForm() {
       this.$refs.form.validate().then(val => {
-        console.log('form validate result: ', val);
+        console.log('form validate result: ', val.errMsg);
       });
     }
   }

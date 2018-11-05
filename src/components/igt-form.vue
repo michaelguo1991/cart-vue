@@ -69,8 +69,10 @@
                     return acc;
                 }, []);
                 return Promise.all(promises).then(results => {
-                    console.log(results);
-                    return true;
+                    const invalidInfo = results.find(result => {
+                        return !result.valid;
+                    })
+                    return invalidInfo || {valid: true};
                 });
             }
         },

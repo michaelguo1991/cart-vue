@@ -38,7 +38,8 @@ export default {
         modelKey: String
     },
     data() {
-        return {}
+        return {
+        }
     },
     computed: {
         componentName() {
@@ -52,6 +53,9 @@ export default {
             const selfRules = this.rules;
             
             return [].concat(selfRules || formRules || []);
+        },
+        modelValue() {
+            return this.igtForm.model[this.modelKey];
         }
     },
     beforeCreate() {
@@ -61,6 +65,7 @@ export default {
     created() {
         this.igtForm.fields.push(this);
         console.log('rules: ', this.realRules);
+        this.initValue = this.modelValue;
     },
     methods: {
         refineField() {
@@ -72,11 +77,11 @@ export default {
             }
         },
         validate() {
-            return validator.validate().then(val => {
+            return validator.validate(this.modelValue, this.realRules).then(val => {
                 return {
-                    valid: val,
+                    valid: val.valid,
                     field: this,
-                    errMsg: '验证错误'
+                    errMsg: val.msg
                 }
             });
         }
