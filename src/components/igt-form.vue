@@ -63,16 +63,49 @@
             }
         },
         methods: {
+            /**
+             * 验证表单中的所有元素是否满足既定规则
+             * @returns {Promise}
+             * 支持异步和同步返回，根据验证的rules来定   
+             * resolve的数据结构
+             * ```
+             * {
+             *  valid: true/false,
+             *  errors: [{
+             *      field: this,
+             *      msg: '',
+             *      ruleName: '',
+             *      extraData: {}
+             *  }
+             * }]
+             * ```
+             */
             validate() {
                 const promises = this.fields.reduce((acc, field) => {
                     acc.push(field.validate());
                     return acc;
                 }, []);
                 return Promise.all(promises).then(results => {
-                    const invalidInfo = results.find(result => {
-                        return !result.valid;
+                    const invalidInfo = results.find(validResult => {
+                        return !validResult.valid;
                     })
-                    return invalidInfo || {valid: true};
+                    const errors = results.reduce((acc, result) => {
+                        if (!result.valid) {
+                            acc.push(result.error);
+                        }
+                        return acc;
+                    }, []);
+                    if (errors.length > 0) {
+                        return {
+                            valid: false,
+                            errors
+                        }
+                    }
+
+                    return {
+                        valid: true,
+                        errors: []
+                    }
                 });
             }
         },

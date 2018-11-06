@@ -1,41 +1,49 @@
-import rules from './rules';
+import * as rules from './rules';
 
-const allRules = rules;
+const allRulesMap = Object.keys(rules).reduce((prev, ruleName) => {
+    prev[ruleName] = rules[ruleName];
+    return prev;
+}, {});
+
 const ruleManager = {
-    getRuleByCustomRule(rule) {
-        console.log('rulemananger: ', allRules);
-        const ruleKey = Object.keys(rule).find(key => {
-            return Object.keys(allRules).indexOf(key) > -1 || /validator/ig.test(key);
-        });
-
-        if (ruleKey) {
-            if (/validator/ig.test(ruleKey)) {
-                if (typeof rule[ruleKey] == 'function') {
-                    return {
-                        rule: {
-                            validate: rule[ruleKey]
-                        },
-                        ruleType: ruleKey
-                    }
+    /**
+     * 根据用户指定的校验规则，获取规则名称
+     * @param {Object} userRule 用户指定的规则 `{required: true, msg: ''}`
+     * @returns {string} 规则名称
+     */
+    getRuleName(userRule) {
+        return Object.keys(userRule).find(key => {
+            return allRulesMap[key] || /validator/ig.test(key);
+        }) || '';
+    },
+    /**
+     * 根据规则名称获取对应的规则验证函数及相关信息
+     * @param {string} ruleName 规则名称
+     * @param {Object} userRule 用户指定的规则，可为空 `{customValidator: validateFn, msg: ''}`
+     * @returns {Object} 返回规则验证相关信息, 如无则返回null
+     * ```
+     * {
+     *  validate: fn, //验证函数
+     *  paramNames: [''] //规则参数
+     * }
+     * ```
+     */
+    getRuleValidator(ruleName, userRule) {
+        if (!ruleName) {
+            return null;
+        }
+        //自定义规则
+        if (/validator/ig.test(ruleName)) {
+            if (typeof userRule[ruleName] == 'function') {
+                return {
+                    validate: userRule[ruleName],
+                    paramNames: []
                 }
+            } else {
                 return null;
             }
-            return {
-                rule: allRules[ruleKey],
-                ruleType: ruleKey
-            }
         }
-        
-        return null;
-    },
-    getParams(ruleParam, definedRule) {
-        let params = (ruleParam + '').split(',');
-        if (definedRule.paramNames) {
-            return definedRule.paramNames.reduce((acc, paramName, index) => {
-                acc[paramName] = params[index];
-                return acc;
-            }, {});
-        }
+        return allRulesMap[ruleName] || null;
     }
 };
 

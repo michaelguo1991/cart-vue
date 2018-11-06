@@ -249,7 +249,7 @@ export default {
     },
     validateForm() {
       this.$refs.form.validate().then(val => {
-        console.log('form validate result: ', val.errMsg);
+        console.log('form validate result: ', val);
       });
     }
   }

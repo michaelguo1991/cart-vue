@@ -76,12 +76,29 @@ export default {
                 this.realType = this.type;
             }
         },
+        /**
+         * 验证表单元素值是否通过验证
+         * @returns {Promise}
+         * 支持异步和同步返回，根据验证的rules来定   
+         * resolve的数据结构
+         * ```
+         * {
+         *  valid: true/false,
+         *  error: {
+         *      field: this,
+         *      msg: '',
+         *      ruleName: '',
+         *      extraData: {}
+         *  }
+         * }
+         * ```
+         */
         validate() {
-            return validator.validate(this.modelValue, this.realRules).then(val => {
+            return validator.validate(this.modelValue, this.realRules).then(validResult => {
+                console.log('field valid result: ', validResult);
                 return {
-                    valid: val.valid,
-                    field: this,
-                    errMsg: val.msg
+                    valid: validResult.valid,
+                    error: Object.assign({}, {field: this}, (validResult.errors && validResult.errors[0]) || {})
                 }
             });
         }
