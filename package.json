@@ -10,6 +10,8 @@
   "dependencies": {
     "cube-ui": "~1.11.0",
     "element-ui": "^2.4.5",
+    "node-sass": "^4.10.0",
+    "sass-loader": "^7.1.0",
     "vee-validate": "^2.1.2",
     "vue": "^2.5.17"
   },

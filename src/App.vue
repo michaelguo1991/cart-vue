@@ -9,20 +9,23 @@
       </p>
       <el-button>el-button</el-button>
     </div>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <!-- <element-form></element-form> -->
+    <tab-bar-example></tab-bar-example>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
 import ElementForm from './components/ElementForm';
+import TabBarExample from './components/tabbar/TabBarExample';
 
 export default {
   name: 'app',
   components: {
     HelloWorld,
-    ElementForm
+    ElementForm,
+    TabBarExample
   }
 }
 </script>

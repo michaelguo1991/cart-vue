@@ -1,27 +1,111 @@
 <template>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
-        <el-form-item label="活动名称" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-        </el-form-item>
-        <el-form-item label="活动区域" prop="region">
-            <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="活动性质" prop="type">
-            <el-checkbox-group v-model="ruleForm.type">
-                <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-                <el-checkbox label="地推活动" name="type"></el-checkbox>
-                <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-                <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-            </el-checkbox-group>
-        </el-form-item>
-        <el-form-item>
-            <!-- <input v-validate="'required|number|max:100'" v-model="ruleForm.name" type="number" name="testName" /> -->
-            <el-input v-validate="'required|number|max:100'" v-model="ruleForm.age" type="number" name="elName" />>
-        </el-form-item>
-    </el-form>
+    <div>
+        <el-form 
+            v-loading="loading"
+            element-loading-spinner="el-icon-loading"
+            element-loading-text="正在验证中"
+            :model="ruleForm"
+            :rules="rules"
+            ref="ruleForm"
+        >
+            <el-form-item label="活动名称" prop="name">
+                <el-input v-model="ruleForm.name"></el-input>
+            </el-form-item>
+            <el-form-item label="活动区域" prop="region">
+                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="活动区域" prop="region">
+                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="活动区域" prop="region">
+                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="活动区域" prop="region">
+                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="活动区域" prop="region">
+                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="活动区域" prop="region">
+                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="活动区域" prop="region">
+                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="活动区域" prop="region">
+                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="活动区域" prop="region">
+                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="活动区域" prop="region">
+                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="活动区域" prop="region">
+                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="活动区域" prop="region">
+                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="活动区域" prop="region">
+                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="活动性质" prop="type">
+                <el-checkbox-group v-model="ruleForm.type">
+                    <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
+                    <el-checkbox label="地推活动" name="type"></el-checkbox>
+                    <el-checkbox label="线下主题活动" name="type"></el-checkbox>
+                    <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
+                </el-checkbox-group>
+            </el-form-item>
+            <el-form-item>
+                <!-- <input v-validate="'required|number|max:100'" v-model="ruleForm.name" type="number" name="testName" /> -->
+                <el-input v-validate="'required|max:100'" v-model="ruleForm.age" type="number" name="elName" />>
+            </el-form-item>
+            <el-form-item>
+                <el-button @click="loading = !loading">Toggle Loading</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
 </template>
 
 <script>
@@ -33,6 +117,7 @@ export default {
     data() {
         console.log(this.$validator);
         return {
+            loading: true,
             ruleForm: {
                 name: '',
                 region: '',
